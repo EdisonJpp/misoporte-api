@@ -1,0 +1,57 @@
+version: "3.8"
+
+services:
+  dev:
+    container_name: misoporte_api_dev
+    image: misoporte-api-dev:1.0.0
+    build:
+      context: .
+      target: development
+      dockerfile: ./Dockerfile
+    command: yarn run start:debug
+    ports:
+      - 3000:3000
+      - 9229:9229
+    networks:
+      - misoporte-api-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+  prod:
+    container_name: misoporte_api_prod
+    image: nestjs-api-prod:1.0.0
+    build:
+      context: .
+      target: production
+      dockerfile: ./Dockerfile
+    command: yarn run start:prod
+    ports:
+      - 3000:3000
+      - 9229:9229
+    networks:
+      - misoporte-api-network
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    restart: unless-stopped
+  db:
+    container_name: database_dev
+    image: "edisonjpp/postgresql:postgresql"
+    environment:
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      # - POSTGRES_HOST=localhost
+      # - POSTGRES_PORT=5432
+      # - POSTGRES_HOST_AUTH_METHOD=${POSTGRES_HOST_AUTH_METHOD}
+      - PG_DATA=/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+volumes:
+  pgdata:
+networks:
+  misoporte-api-network:

@@ -1,0 +1,16 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+# LC_ALL=C
+
+# local_branch="$(git rev-parse --abbrev-ref HEAD)"
+# prefix_items="(feat|hotfix|fix|test)"
+# valid_branch_regex="^$prefix_items\/[a-z0-9._-]+$"
+
+# if [[ ! $local_branch =~ $valid_branch_regex ]]
+# then
+#     echo "Branch naming convention is -> $prefix_items/task_name | (sample: feat/users)   "
+#     exit 1
+# fi
+
+yarn lint-staged
